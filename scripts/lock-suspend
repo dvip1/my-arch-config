@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# First lock the screen
+hyprlock &
+
+# Wait a bit to ensure the screen is locked before suspending
+sleep 1
+
+# Then suspend
+systemctl suspend

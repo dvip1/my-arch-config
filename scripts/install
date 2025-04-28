@@ -1,0 +1,42 @@
+#!/usr/bin/env bash 
+
+
+set -e
+
+echo "Updating package lists..."
+sudo pacman -Sy   # or apt update, dnf, depending on distro
+
+echo "Installing required packages..."
+sudo pacman -S --needed \
+  hyprland \
+  kitty \
+  tmux \
+  nautilus \
+  wofi \
+  firefox \
+  waybar \
+  cliphist \
+  wl-clipboard \
+  gnome-keyring \
+  swaync \
+  blueman \
+  hyprpaper \
+  wob \
+  pulseaudio \
+  pavucontrol \
+  socat \
+  playerctl
+
+echo "Creating config directories..."
+mkdir -p ~/.config/{hypr,waybar,nvim,wob,swaync,hyprpaper}
+
+echo "Copying config files..."
+cp -r ./config/hypr/* ~/.config/hypr/
+cp -r ./config/waybar/* ~/.config/waybar/
+cp -r ./config/nvim/* ~/.config/nvim/
+cp -r ./config/wob/* ~/.config/wob/
+cp -r ./config/swaync/* ~/.config/swaync/
+cp -r ./config/hyprpaper/* ~/.config/hyprpaper/
+
+echo "All done! Enjoy your beautiful setup."
+

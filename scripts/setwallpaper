@@ -1,0 +1,47 @@
+#!/bin/bash
+
+# Check if a wallpaper path is provided
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 /path/to/wallpaper"
+    exit 1
+fi
+
+# Get the absolute path of the wallpaper
+WALLPAPER=$(realpath "$1")
+
+# Check if the file exists
+if [ ! -f "$WALLPAPER" ]; then
+    echo "Error: File does not exist"
+    exit 1
+fi
+
+# Set path for permanent config
+PERMANENT_CONFIG="$HOME/.config/hypr/hyprpaper.conf"
+
+# Create config directory if it doesn't exist
+mkdir -p "$(dirname "$PERMANENT_CONFIG")"
+
+# Get all monitors
+MONITORS=$(hyprctl monitors -j | jq -r '.[].name')
+
+# Create new config content
+CONFIG_CONTENT="preload = $WALLPAPER\n"
+
+# Add wallpaper setting for each monitor
+for monitor in $MONITORS; do
+    CONFIG_CONTENT+="wallpaper = $monitor,$WALLPAPER\n"
+done
+
+# Save to permanent config
+echo -e "$CONFIG_CONTENT" > "$PERMANENT_CONFIG"
+
+# Also save to temporary config for immediate effect
+echo -e "$CONFIG_CONTENT" > "/tmp/hyprpaper.conf"
+
+# Kill existing hyprpaper instance if running
+pkill hyprpaper
+
+# Start hyprpaper with new config
+runbackground hyprpaper -c "/tmp/hyprpaper.conf"
+
+echo "Wallpaper settings have been updated and saved permanently to $PERMANENT_CONFIG"
