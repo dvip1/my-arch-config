@@ -120,6 +120,17 @@ local plugins = {
 		"nomnivore/ollama.nvim",
 		dependencies = { "nvim-lua/plenary.nvim" },
 	},
+	{ "datsfilipe/vesper.nvim" },
+	{ "akinsho/bufferline.nvim", version = "*", dependencies = "nvim-tree/nvim-web-devicons" },
+	{ "chentoast/marks.nvim" },
+	{
+		"catppuccin/nvim",
+		name = "catppuccin",
+		priority = 1000,
+		config = function()
+			vim.cmd("colorscheme catppuccin-mocha") -- or latte/frappe/macchiato
+		end,
+	},
 }
 
 require("lazy").setup(plugins, {})
